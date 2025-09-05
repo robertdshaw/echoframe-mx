@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta Crítica EchoFrame</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: 0 auto; background-color: white; }
+        .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; text-align: center; }
+        .alert-icon { font-size: 48px; margin-bottom: 15px; }
+        .logo { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+        .timestamp { font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .critical-banner { background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 20px; margin-bottom: 25px; text-align: center; }
+        .risk-level { color: #721c24; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        .risk-score { color: #dc3545; font-size: 18px; margin-bottom: 15px; }
+        .alert-details { background-color: #f8f9fa; border-left: 5px solid #dc3545; padding: 20px; margin: 20px 0; }
+        .article-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; }
+        .alert-summary { font-size: 16px; line-height: 1.6; color: #555; margin-bottom: 15px; }
+        .meta-info { background-color: white; padding: 15px; border-radius: 6px; margin-top: 15px; }
+        .meta-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .meta-label { font-weight: bold; color: #666; }
+        .meta-value { color: #333; }
+        .sector-badge { background-color: #dc3545; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .action-section { background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .action-title { color: #856404; font-weight: bold; margin-bottom: 10px; }
+        .action-list { list-style: none; padding: 0; }
+        .action-list li { margin-bottom: 8px; color: #856404; }
+        .action-list li:before { content: "✓ "; color: #28a745; font-weight: bold; }
+        .btn { background-color: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 15px; }
+        .footer { background-color: #333; color: white; padding: 20px; text-align: center; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="alert-icon">🚨</div>
+            <div class="logo">EchoFrame MX</div>
+            <div class="timestamp">{{ timestamp }}</div>
+        </div>
+        
+        <div class="content">
+            <div class="critical-banner">
+                <div class="risk-level">RIESGO CRÍTICO DETECTADO</div>
+                <div class="risk-score">Puntuación de Riesgo: {{ "%.2f"|format(alert.risk_score) }}/1.00</div>
+                <div class="sector-badge">{{ alert.sector.value|upper }}</div>
+            </div>
+            
+            <h2>Hola {{ client.name }},</h2>
+            <p><strong>Se ha detectado un riesgo crítico</strong> que requiere tu atención inmediata. Nuestro sistema de inteligencia artificial ha identificado un evento de alto impacto en tu área de interés.</p>
+            
+            <div class="alert-details">
+                <div class="article-title">{{ alert.article.title }}</div>
+                <div class="alert-summary">{{ alert.summary }}</div>
+                
+                <div class="meta-info">
+                    <div class="meta-row">
+                        <span class="meta-label">Fuente:</span>
+                        <span class="meta-value">{{ alert.article.source.name }}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Ubicación:</span>
+                        <span class="meta-value">{{ alert.article.source.city }}, {{ alert.article.source.state }}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Publicado:</span>
+                        <span class="meta-value">{{ alert.article.published_at.strftime('%d/%m/%Y %H:%M') if alert.article.published_at else 'N/A' }}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Detectado:</span>
+                        <span class="meta-value">{{ alert.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-section">
+                <div class="action-title">Acciones Recomendadas:</div>
+                <ul class="action-list">
+                    <li>Revisar el análisis completo en el dashboard de EchoFrame</li>
+                    <li>Evaluar el impacto potencial en tus operaciones</li>
+                    <li>Considerar medidas de mitigación apropiadas</li>
+                    <li>Monitorear desarrollos adicionales</li>
+                    <li>Informar a equipos relevantes según sea necesario</li>
+                </ul>
+            </div>
+            
+            {% if alert.details and alert.details.keywords_matched %}
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                <strong>Indicadores de Riesgo Detectados:</strong>
+                <p style="margin: 5px 0; color: #666;">
+                    {% for keyword in alert.details.keywords_matched[:5] %}
+                        <span style="background-color: #e9ecef; padding: 2px 6px; border-radius: 3px; margin-right: 5px;">{{ keyword }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            {% endif %}
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ echoframe_url }}/alerts/{{ alert.id }}" class="btn">Ver Análisis Completo</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>EchoFrame MX</strong> - Sistema de Inteligencia de Riesgos</p>
+            <p>Esta alerta fue generada automáticamente por nuestro sistema de IA.</p>
+            <p>Para emergencias, contacta inmediatamente a tu equipo de gestión de riesgos.</p>
+        </div>
+    </div>
+</body>
+</html>

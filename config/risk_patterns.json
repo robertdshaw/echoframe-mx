@@ -1,0 +1,261 @@
+{
+  "energy_patterns": [
+    {
+      "name": "Regulatory Risk - Energy Permits",
+      "sector": "energy",
+      "pattern_type": "regulatory",
+      "keywords": ["sener", "cnh", "cre", "permiso", "licencia", "autorización", "suspensión", "revocación"],
+      "risk_level": "high",
+      "description": "Regulatory actions affecting energy permits and licenses",
+      "template": {
+        "triggers": [
+          "suspensión de permisos",
+          "revocación de licencia",
+          "investigación por sener",
+          "violación de normas energéticas"
+        ],
+        "alert_template": "ALERTA REGULATORIA ENERGÉTICA: {summary}\nImpacto: {risk_level}\nFuente: {source}\nFecha: {date}",
+        "risk_factors": {
+          "permit_suspension": 0.9,
+          "license_revocation": 0.95,
+          "regulatory_investigation": 0.7,
+          "compliance_violation": 0.8
+        }
+      }
+    },
+    {
+      "name": "Operational Risk - Energy Infrastructure",
+      "sector": "energy",
+      "pattern_type": "operational",
+      "keywords": ["accidente", "falla", "interrupción", "explosión", "derrame", "incendio", "refinería", "plataforma"],
+      "risk_level": "critical",
+      "description": "Operational incidents affecting energy infrastructure",
+      "template": {
+        "triggers": [
+          "explosión en refinería",
+          "derrame de petróleo",
+          "falla en plataforma",
+          "incendio en instalaciones"
+        ],
+        "alert_template": "ALERTA OPERACIONAL ENERGÉTICA: {summary}\nSeveridad: {risk_level}\nInstalación: {location}\nFecha: {date}",
+        "risk_factors": {
+          "explosion": 0.95,
+          "oil_spill": 0.9,
+          "facility_fire": 0.85,
+          "infrastructure_failure": 0.8
+        }
+      }
+    },
+    {
+      "name": "Social Risk - Energy Projects",
+      "sector": "energy",
+      "pattern_type": "social",
+      "keywords": ["protesta", "manifestación", "comunidad", "indígena", "bloqueo", "oposición", "consulta"],
+      "risk_level": "medium",
+      "description": "Social conflicts related to energy projects",
+      "template": {
+        "triggers": [
+          "protesta de comunidades",
+          "bloqueo de acceso",
+          "oposición comunitaria",
+          "falta de consulta previa"
+        ],
+        "alert_template": "ALERTA SOCIAL ENERGÉTICA: {summary}\nTipo de Conflicto: {conflict_type}\nUbicación: {location}\nFecha: {date}",
+        "risk_factors": {
+          "community_protest": 0.7,
+          "access_blockade": 0.8,
+          "indigenous_opposition": 0.75,
+          "consultation_issues": 0.6
+        }
+      }
+    },
+    {
+      "name": "Financial Risk - Energy Sector",
+      "sector": "energy",
+      "pattern_type": "financial",
+      "keywords": ["pérdidas", "deuda", "bancarrota", "multa", "sanción", "costo", "inversión", "financiamiento"],
+      "risk_level": "high",
+      "description": "Financial risks in the energy sector",
+      "template": {
+        "triggers": [
+          "pérdidas millonarias",
+          "multa por violaciones",
+          "problemas de financiamiento",
+          "sobrecostos en proyectos"
+        ],
+        "alert_template": "ALERTA FINANCIERA ENERGÉTICA: {summary}\nImpacto Económico: {amount}\nEmpresa: {company}\nFecha: {date}",
+        "risk_factors": {
+          "major_losses": 0.85,
+          "regulatory_fines": 0.8,
+          "financing_issues": 0.75,
+          "cost_overruns": 0.7
+        }
+      }
+    }
+  ],
+  "pharma_patterns": [
+    {
+      "name": "Regulatory Risk - Pharmaceutical Compliance",
+      "sector": "pharma",
+      "pattern_type": "regulatory",
+      "keywords": ["cofepris", "suspensión", "revocación", "investigación", "violación", "norma", "sanitaria"],
+      "risk_level": "high",
+      "description": "Regulatory compliance issues in pharmaceutical sector",
+      "template": {
+        "triggers": [
+          "suspensión por cofepris",
+          "revocación de registro",
+          "investigación sanitaria",
+          "violación de normas"
+        ],
+        "alert_template": "ALERTA REGULATORIA FARMACÉUTICA: {summary}\nAutoridad: COFEPRIS\nAcción: {regulatory_action}\nFecha: {date}",
+        "risk_factors": {
+          "cofepris_suspension": 0.9,
+          "registration_revocation": 0.95,
+          "sanitary_investigation": 0.8,
+          "compliance_violation": 0.85
+        }
+      }
+    },
+    {
+      "name": "Safety Risk - Drug Safety",
+      "sector": "pharma",
+      "pattern_type": "safety",
+      "keywords": ["efectos adversos", "retiro", "recall", "contaminación", "falsificación", "seguridad"],
+      "risk_level": "critical",
+      "description": "Drug safety and quality issues",
+      "template": {
+        "triggers": [
+          "retiro de medicamento",
+          "efectos adversos graves",
+          "contaminación detectada",
+          "medicamentos falsificados"
+        ],
+        "alert_template": "ALERTA DE SEGURIDAD FARMACÉUTICA: {summary}\nMedicamento: {drug_name}\nRiesgo: {safety_risk}\nFecha: {date}",
+        "risk_factors": {
+          "drug_recall": 0.95,
+          "adverse_effects": 0.9,
+          "contamination": 0.95,
+          "counterfeit_drugs": 0.85
+        }
+      }
+    },
+    {
+      "name": "Supply Risk - Pharmaceutical Supply Chain",
+      "sector": "pharma",
+      "pattern_type": "supply",
+      "keywords": ["escasez", "desabasto", "falta", "interrupción", "proveedor", "importación"],
+      "risk_level": "medium",
+      "description": "Supply chain disruptions in pharmaceutical sector",
+      "template": {
+        "triggers": [
+          "escasez de medicamentos",
+          "desabasto hospitalario",
+          "interrupción de suministro",
+          "problemas de importación"
+        ],
+        "alert_template": "ALERTA DE SUMINISTRO FARMACÉUTICO: {summary}\nMedicamentos Afectados: {affected_drugs}\nRegión: {location}\nFecha: {date}",
+        "risk_factors": {
+          "drug_shortage": 0.8,
+          "hospital_shortage": 0.85,
+          "supply_interruption": 0.75,
+          "import_issues": 0.7
+        }
+      }
+    },
+    {
+      "name": "Market Risk - Pharmaceutical Market",
+      "sector": "pharma",
+      "pattern_type": "market",
+      "keywords": ["competencia", "genéricos", "precio", "licitación", "patente", "exclusividad"],
+      "risk_level": "low",
+      "description": "Market competition and pricing risks",
+      "template": {
+        "triggers": [
+          "nueva competencia",
+          "entrada de genéricos",
+          "cambios de precios",
+          "pérdida de licitación"
+        ],
+        "alert_template": "ALERTA DE MERCADO FARMACÉUTICO: {summary}\nImpacto Comercial: {market_impact}\nSegmento: {market_segment}\nFecha: {date}",
+        "risk_factors": {
+          "new_competition": 0.5,
+          "generic_entry": 0.6,
+          "pricing_changes": 0.4,
+          "tender_loss": 0.7
+        }
+      }
+    }
+  ],
+  "general_patterns": [
+    {
+      "name": "Political Risk - Government Changes",
+      "sector": "general",
+      "pattern_type": "political",
+      "keywords": ["elecciones", "gobierno", "política", "cambio", "reforma", "ley", "decreto"],
+      "risk_level": "medium",
+      "description": "Political changes affecting business environment",
+      "template": {
+        "triggers": [
+          "cambio de gobierno",
+          "nueva legislación",
+          "reforma regulatoria",
+          "decreto presidencial"
+        ],
+        "alert_template": "ALERTA POLÍTICA: {summary}\nNivel de Gobierno: {government_level}\nImpacto: {political_impact}\nFecha: {date}",
+        "risk_factors": {
+          "government_change": 0.6,
+          "new_legislation": 0.7,
+          "regulatory_reform": 0.75,
+          "presidential_decree": 0.8
+        }
+      }
+    },
+    {
+      "name": "Economic Risk - Economic Indicators",
+      "sector": "general",
+      "pattern_type": "economic",
+      "keywords": ["inflación", "devaluación", "crisis", "recesión", "pib", "desempleo", "inversión"],
+      "risk_level": "medium",
+      "description": "Economic conditions affecting business operations",
+      "template": {
+        "triggers": [
+          "alta inflación",
+          "devaluación del peso",
+          "crisis económica",
+          "caída del pib"
+        ],
+        "alert_template": "ALERTA ECONÓMICA: {summary}\nIndicador: {economic_indicator}\nTendencia: {trend}\nFecha: {date}",
+        "risk_factors": {
+          "high_inflation": 0.7,
+          "currency_devaluation": 0.8,
+          "economic_crisis": 0.9,
+          "gdp_decline": 0.75
+        }
+      }
+    },
+    {
+      "name": "Security Risk - Security Incidents",
+      "sector": "general",
+      "pattern_type": "security",
+      "keywords": ["violencia", "crimen", "narcotráfico", "secuestro", "extorsión", "inseguridad"],
+      "risk_level": "high",
+      "description": "Security incidents affecting business operations",
+      "template": {
+        "triggers": [
+          "aumento de violencia",
+          "actividad criminal",
+          "operativos militares",
+          "inseguridad empresarial"
+        ],
+        "alert_template": "ALERTA DE SEGURIDAD: {summary}\nTipo de Incidente: {security_incident}\nÁrea: {location}\nFecha: {date}",
+        "risk_factors": {
+          "violence_increase": 0.8,
+          "criminal_activity": 0.85,
+          "military_operations": 0.7,
+          "business_insecurity": 0.9
+        }
+      }
+    }
+  ]
+}

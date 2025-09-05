@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: echoframe-postgres
+    environment:
+      POSTGRES_DB: echoframe
+      POSTGRES_USER: echoframe_user
+      POSTGRES_PASSWORD: echoframe_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - echoframe-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: echoframe-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - echoframe-network
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: echoframe-app
+    environment:
+      - DATABASE_URL=postgresql://echoframe_user:echoframe_pass@postgres:5432/echoframe
+      - REDIS_URL=redis://redis:6379
+      - PYTHONPATH=/app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./config:/app/config
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - echoframe-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: echoframe-worker
+    command: python -m celery -A src.processing.tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://echoframe_user:echoframe_pass@postgres:5432/echoframe
+      - REDIS_URL=redis://redis:6379
+      - PYTHONPATH=/app
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./config:/app/config
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - echoframe-network
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: echoframe-scheduler
+    command: python -m celery -A src.processing.tasks beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://echoframe_user:echoframe_pass@postgres:5432/echoframe
+      - REDIS_URL=redis://redis:6379
+      - PYTHONPATH=/app
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./config:/app/config
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - echoframe-network
+
+volumes:
+  postgres_data:
+
+networks:
+  echoframe-network:
+    driver: bridge

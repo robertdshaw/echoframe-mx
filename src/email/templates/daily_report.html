@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Diario EchoFrame</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: 0 auto; background-color: white; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .logo { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+        .subtitle { font-size: 16px; opacity: 0.9; }
+        .stats { display: flex; justify-content: space-around; padding: 20px; background-color: #f8f9fa; }
+        .stat { text-align: center; }
+        .stat-number { font-size: 24px; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 12px; color: #666; text-transform: uppercase; }
+        .content { padding: 30px; }
+        .alert-section { margin-bottom: 30px; }
+        .section-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; border-left: 4px solid #667eea; padding-left: 15px; }
+        .alert-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .alert-critical { border-left: 5px solid #dc3545; }
+        .alert-high { border-left: 5px solid #fd7e14; }
+        .alert-medium { border-left: 5px solid #ffc107; }
+        .alert-low { border-left: 5px solid #28a745; }
+        .alert-title { font-weight: bold; font-size: 16px; margin-bottom: 8px; }
+        .alert-summary { color: #666; font-size: 14px; line-height: 1.5; }
+        .alert-meta { font-size: 12px; color: #888; margin-top: 8px; }
+        .sector-badge { background-color: #667eea; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-right: 5px; }
+        .footer { background-color: #333; color: white; padding: 20px; text-align: center; }
+        .btn { background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-top: 15px; }
+        .risk-critical { color: #dc3545; font-weight: bold; }
+        .risk-high { color: #fd7e14; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">EchoFrame MX</div>
+            <div class="subtitle">Reporte Diario de Riesgos - {{ date }}</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">{{ stats.total_alerts }}</div>
+                <div class="stat-label">Total Alertas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number risk-critical">{{ stats.critical_count }}</div>
+                <div class="stat-label">Críticas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number risk-high">{{ stats.high_count }}</div>
+                <div class="stat-label">Altas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">{{ stats.sectors_affected }}</div>
+                <div class="stat-label">Sectores</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h2>Hola {{ client.name }},</h2>
+            <p>Tu reporte diario de EchoFrame está listo. Hemos detectado <strong>{{ stats.total_alerts }} alertas</strong> relevantes para tus sectores de interés.</p>
+            
+            {% if critical_alerts %}
+            <div class="alert-section">
+                <h3 class="section-title">🚨 Alertas Críticas</h3>
+                {% for alert in critical_alerts %}
+                <div class="alert-card alert-critical">
+                    <div class="alert-title">{{ alert.article.title }}</div>
+                    <div class="alert-summary">{{ alert.summary }}</div>
+                    <div class="alert-meta">
+                        <span class="sector-badge">{{ alert.sector.value|upper }}</span>
+                        {{ alert.article.source.name }} - {{ alert.created_at.strftime('%H:%M') }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if high_alerts %}
+            <div class="alert-section">
+                <h3 class="section-title">⚠️ Alertas de Alto Riesgo</h3>
+                {% for alert in high_alerts[:5] %}
+                <div class="alert-card alert-high">
+                    <div class="alert-title">{{ alert.article.title }}</div>
+                    <div class="alert-summary">{{ alert.summary }}</div>
+                    <div class="alert-meta">
+                        <span class="sector-badge">{{ alert.sector.value|upper }}</span>
+                        {{ alert.article.source.name }} - {{ alert.created_at.strftime('%H:%M') }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if alerts_by_sector %}
+            <div class="alert-section">
+                <h3 class="section-title">📊 Resumen por Sector</h3>
+                {% for sector, sector_alerts in alerts_by_sector.items() %}
+                <div class="alert-card">
+                    <div class="alert-title">
+                        <span class="sector-badge">{{ sector.value|upper }}</span>
+                        {{ sector_alerts|length }} alertas detectadas
+                    </div>
+                    <div class="alert-summary">
+                        {% set critical = sector_alerts|selectattr("risk_level.value", "equalto", "critical")|list|length %}
+                        {% set high = sector_alerts|selectattr("risk_level.value", "equalto", "high")|list|length %}
+                        {% if critical > 0 %}{{ critical }} críticas, {% endif %}
+                        {% if high > 0 %}{{ high }} altas{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <p>Para ver el análisis completo y explorar los datos en detalle:</p>
+            <a href="{{ echoframe_url }}" class="btn">Ver Dashboard Completo</a>
+        </div>
+        
+        <div class="footer">
+            <p><strong>EchoFrame MX</strong> - Inteligencia de Riesgos para México</p>
+            <p>Este es un correo automático. Para cambiar tus preferencias de notificación, <a href="{{ echoframe_url }}/preferences" style="color: #667eea;">haz clic aquí</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

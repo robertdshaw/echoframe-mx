@@ -17,7 +17,8 @@ from src.ingestion.rss_fetcher import initialize_rss_sources
 from src.ingestion.synthetic_data import SyntheticDataGenerator
 from src.processing.nlp_pipeline import NLPPipeline
 from src.rag.vector_store import VectorStore
-from src.database import async_engine, AsyncSessionLocal
+from sqlalchemy.ext.asyncio import create_async_engine
+from src.config import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -5,15 +5,15 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from .config import settings
 
 # Sync database setup
-SQLALCHEMY_DATABASE_URL = settings.database_url
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+sqlalchemy_database_url = settings.database_url
+engine = create_engine(sqlalchemy_database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Async database setup
-ASYNC_DATABASE_URL = settings.database_url.replace(
+async_database_url = settings.database_url.replace(
     "postgresql://", "postgresql+asyncpg://"
 )
-async_engine = create_async_engine(ASYNC_DATABASE_URL, echo=settings.debug)
+async_engine = create_async_engine(async_database_url, echo=settings.debug)
 AsyncSessionLocal = sessionmaker(
     async_engine, class_=AsyncSession, expire_on_commit=False
 )

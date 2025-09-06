@@ -23,8 +23,8 @@ from src.config import settings
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize async_engine using settings.DATABASE_URL
-async_engine = create_async_engine(settings.DATABASE_URL, echo=True)
+# Initialize async_engine using settings.database_url
+async_engine = create_async_engine(settings.database_url, echo=True)
 
 
 async def initialize_system():

@@ -23,6 +23,9 @@ from src.config import settings
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Initialize async_engine using settings.DATABASE_URL
+async_engine = create_async_engine(settings.DATABASE_URL, echo=True)
+
 
 async def initialize_system():
     """Initialize EchoFrame MX system"""
